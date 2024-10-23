@@ -21,11 +21,18 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Deps
+      - name: Install Flask app dependencies
         run: |
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
+
+      - name: Run Flask app
+        run: |
+          source venv/bin/activate
+          flask initdb
+          flask translate compile
+          nohup flask run > flask.log 2>&1 &
 
       - name: checkout test repo
         run: git clone https://github.com/LuisAlejandroRe/todoism-test.git
@@ -44,11 +51,14 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: |
+          cd todoism-test
+          npx playwright test todoList.spec.ts
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
-          path: playwright-report/
+          path: todoism-test/playwright-report/
           retention-days: 30
