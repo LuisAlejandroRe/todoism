@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout todolist APP
-        uses: actions/chackout@v3
+        uses: actions/checkout@v3
 
       - name: Setup python
         uses: actions/setup-python@v4
