@@ -1,4 +1,4 @@
-name: Run AUtomated Tests
+name: Run Automated Tests
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
           nohup flask run > flask.log 2>&1 &
 
       - name: checkout test repo
-        run: git clone https://github.com/juan-esteban-daza/todoism-eafit-tests.git
+        run: git clone https://github.com/LuisAlejandroRe/todoism-test.git
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -44,7 +44,7 @@ jobs:
 
       - name: Install tests deps
         run: |
-          cd todoism-eafit-tests
+          cd todoism-test
           npm ci
 
       - name: Install Playwright Browsers
@@ -52,7 +52,7 @@ jobs:
 
       - name: Run Playwright tests
         run: |
-          cd todoism-eafit-tests
+          cd todoism-test
           npx playwright test todoList.spec.ts
 
       - name: Upload Artifact
@@ -60,5 +60,5 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
-          path: todoism-eafit-tests/playwright-report/
+          path: todoism-test/playwright-report/
           retention-days: 30
